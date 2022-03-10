@@ -1,40 +1,60 @@
 import React from 'react';
 import './style.css';
+import RenderGIF from './RenderGIF';
 
 export default function App() {
-  const [inputValue, setInputValue] = React.useState();
+  const [searchGIF, setSearchGIF] = React.useState('hello');
+  const [isLoading, setIsLoading] = React.useState(true);
   const [data, setData] = React.useState([]);
+  const [displayGIF, setDisplayGIF] = React.useState(false);
+  const [postData, setPostData] = React.useState({
+    text: '',
+    GIF: '',
+  });
 
   React.useEffect(() => {
     fetch(
-      `https://api.giphy.com/v1/gifs/trending?q=${inputValue}&api_key=YK63OGoaLmUWrTUU6LnW1sGekNWXcYQM&limit=5`
+      `https://api.giphy.com/v1/gifs/search?q=${searchGIF}&api_key=YK63OGoaLmUWrTUU6LnW1sGekNWXcYQM&limit=10`
     )
       .then((res) => res.json())
       .then((data) => {
-        // console.log(data);
         setData(data.data);
+        setIsLoading(false);
       });
-  }, []);
-  console.log(inputValue);
-
+  }, [searchGIF]);
+  // console.log(postData);
+  const handleChange = (e) => {
+    setPostData((prevState) => ({
+      ...prevState,
+      text: e.target.value,
+    }));
+  };
   return (
     <div>
       <h1>Hello StackBlitz!</h1>
       <p>Start editing to see some magic happen :)</p>
       <input
-        type="text"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        placeholder="Write Something here..."
+        onChange={handleChange}
       ></input>
       <br />
       <br />
-      {data &&
-        data.map((gif) => (
-          <div key={gif.id}>
-            {/* <p>{gif.id}</p> */}
-            <img src={gif.images.fixed_height.url} />
-          </div>
-        ))}
+      <button type="button" onClick={() => setDisplayGIF(true)}>
+        GIF
+      </button>
+      <br />
+      <br />
+      {displayGIF && (
+        <RenderGIF
+          displayGIF={displayGIF}
+          isLoading={isLoading}
+          data={data}
+          setSearchGIF={setSearchGIF}
+          searchGIF={searchGIF}
+          setPostData={setPostData}
+          postData={postData}
+        />
+      )}
     </div>
   );
 }
