@@ -7,6 +7,7 @@ export default function App() {
   const [isLoading, setIsLoading] = React.useState(true);
   const [data, setData] = React.useState([]);
   const [displayGIF, setDisplayGIF] = React.useState(false);
+  const [totalPostedData, setTotalPostedData] = React.useState([]);
   const [postData, setPostData] = React.useState({
     text: '',
     GIF: '',
@@ -22,17 +23,27 @@ export default function App() {
         setIsLoading(false);
       });
   }, [searchGIF]);
-  // console.log(postData);
+  console.log(totalPostedData);
   const handleChange = (e) => {
     setPostData((prevState) => ({
       ...prevState,
       text: e.target.value,
     }));
   };
+  const HandlePost = () => {
+    return (
+      <div>
+        {totalPostedData?.map((data, index) => (
+          <div key={index}>
+            <p>{data.text}</p>
+            <img src={data.GIF} />
+          </div>
+        ))}
+      </div>
+    );
+  };
   return (
     <div>
-      <h1>Hello StackBlitz!</h1>
-      <p>Start editing to see some magic happen :)</p>
       <input
         placeholder="Write Something here..."
         onChange={handleChange}
@@ -49,12 +60,22 @@ export default function App() {
           displayGIF={displayGIF}
           isLoading={isLoading}
           data={data}
+          setData={setData}
           setSearchGIF={setSearchGIF}
           searchGIF={searchGIF}
           setPostData={setPostData}
           postData={postData}
         />
       )}
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          setTotalPostedData([...totalPostedData, postData]);
+        }}
+      >
+        Post
+      </button>
+      <HandlePost />
     </div>
   );
 }

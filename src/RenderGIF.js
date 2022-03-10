@@ -5,28 +5,24 @@ export default function RenderGIF({
   displayGIF,
   isLoading,
   setSearchGIF,
-  postData,
   setPostData,
 }) {
+  const [border, setBorder] = React.useState('');
   const Render = () => {
-    //   const handleChange = (gif) => {
-    //     setPostData((prevState) => ({
-    //       ...prevState,
-    //       GIF: gif.images.fixed_height.url,
-    //     }));
-    //   };
     return (
       <div>
         {data &&
           data.map((gif) => (
             <div key={gif.id}>
               <img
-                onClick={() =>
+                onClick={() => {
+                  setBorder(gif.id);
                   setPostData((prevState) => ({
                     ...prevState,
                     GIF: gif.images.fixed_height.url,
-                  }))
-                }
+                  }));
+                }}
+                className={border === gif.id ? 'img-border' : null}
                 src={gif.images.fixed_height.url}
                 width="200"
                 height="200"
@@ -37,7 +33,9 @@ export default function RenderGIF({
       </div>
     );
   };
-  console.log(postData);
+  console.log(border);
+  console.log(isLoading);
+
   return (
     <div>
       <input
@@ -47,7 +45,7 @@ export default function RenderGIF({
       ></input>
       <br />
       <br />
-      {displayGIF && (isLoading ? <p>Loading...</p> : <Render />)}
+      {isLoading ? <p>Loading...</p> : <Render />}
     </div>
   );
 }
