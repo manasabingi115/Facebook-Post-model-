@@ -8,3 +8,8 @@ p {
 .img-border {
   border: 4px solid black;
 }
+.GIF-container {
+  height: 250px;
+  overflow-y: scroll;
+  width: fit-content;
+}

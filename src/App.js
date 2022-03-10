@@ -14,6 +14,7 @@ export default function App() {
   });
 
   React.useEffect(() => {
+    setIsLoading(true);
     fetch(
       `https://api.giphy.com/v1/gifs/search?q=${searchGIF}&api_key=YK63OGoaLmUWrTUU6LnW1sGekNWXcYQM&limit=10`
     )
@@ -23,7 +24,7 @@ export default function App() {
         setIsLoading(false);
       });
   }, [searchGIF]);
-  console.log(totalPostedData);
+
   const handleChange = (e) => {
     setPostData((prevState) => ({
       ...prevState,

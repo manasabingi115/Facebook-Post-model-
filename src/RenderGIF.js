@@ -2,7 +2,6 @@ import React from 'react';
 
 export default function RenderGIF({
   data,
-  displayGIF,
   isLoading,
   setSearchGIF,
   setPostData,
@@ -10,12 +9,13 @@ export default function RenderGIF({
   const [border, setBorder] = React.useState('');
   const Render = () => {
     return (
-      <div>
+      <div className="GIF-container">
         {data &&
           data.map((gif) => (
             <div key={gif.id}>
               <img
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
                   setBorder(gif.id);
                   setPostData((prevState) => ({
                     ...prevState,
@@ -33,8 +33,6 @@ export default function RenderGIF({
       </div>
     );
   };
-  console.log(border);
-  console.log(isLoading);
 
   return (
     <div>
