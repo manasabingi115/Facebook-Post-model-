@@ -5,11 +5,12 @@ export default function RenderGIF({
   isLoading,
   setSearchGIF,
   setPostData,
+  setDisplayGIF,
 }) {
   const [border, setBorder] = React.useState('');
   const Render = () => {
     return (
-      <div className="GIF-container">
+      <div className="GIF-block">
         {data &&
           data.map((gif) => (
             <div key={gif.id}>
@@ -17,6 +18,7 @@ export default function RenderGIF({
                 onClick={(e) => {
                   e.preventDefault();
                   setBorder(gif.id);
+                  setDisplayGIF(false);
                   setPostData((prevState) => ({
                     ...prevState,
                     GIF: gif.images.fixed_height.url,
@@ -35,14 +37,14 @@ export default function RenderGIF({
   };
 
   return (
-    <div>
+    <div className="GIF-container">
+      <div className="GIF-part"></div>
       <input
-        placeholder="GIF"
+        className="GIF-input form-control  form-control-sm"
+        placeholder="Search GIF"
         type="text"
         onChange={(e) => setSearchGIF(e.target.value)}
       ></input>
-      <br />
-      <br />
       {isLoading ? <p>Loading...</p> : <Render />}
     </div>
   );
