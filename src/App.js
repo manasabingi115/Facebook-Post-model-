@@ -6,25 +6,27 @@ import RenderGIF from './RenderGIF';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import Buttons from './Buttons';
+import PostFeed from './PostFeed';
 
+const API_KEY = 'YK63OGoaLmUWrTUU6LnW1sGekNWXcYQM';
+const initialState = { user: 'Manasa Bingi', text: '', GIF: '', BGColor: '' };
+
+const initialTotalPostData = JSON.parse(localStorage.getItem('postData')) || [];
+
+console.log(initialTotalPostData);
 export default function App() {
-  const [searchGIF, setSearchGIF] = React.useState('hello');
+  const [searchGIF, setSearchGIF] = React.useState('hello'); // by default fetching hello gifs.
   const [isLoading, setIsLoading] = React.useState(true);
   const [data, setData] = React.useState([]);
   const [displayGIF, setDisplayGIF] = React.useState(false);
-
-  const [totalPostedData, setTotalPostedData] = React.useState([]);
-  const [postData, setPostData] = React.useState({
-    user: 'manasaBingi',
-    text: '',
-    GIF: '',
-    BGColor: '',
-  });
+  const [totalPostedData, setTotalPostedData] =
+    React.useState(initialTotalPostData);
+  const [postData, setPostData] = React.useState(initialState);
 
   React.useEffect(() => {
     setIsLoading(true);
     fetch(
-      `https://api.giphy.com/v1/gifs/search?q=${searchGIF}&api_key=YK63OGoaLmUWrTUU6LnW1sGekNWXcYQM&limit=20`
+      `https://api.giphy.com/v1/gifs/search?q=${searchGIF}&api_key=${API_KEY}&limit=20`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -39,48 +41,27 @@ export default function App() {
       text: e.target.value,
     }));
   };
-  const HandlePost = () => {
-    return (
-      <div className="posts-container">
-        <h1>Posts:</h1>
-        {totalPostedData?.map((data, index) => (
-          <div
-            key={index}
-            className="post"
-            style={{ backgroundColor: data.BGColor }}
-          >
-            <h3>
-              <FontAwesomeIcon icon={faUserCircle} className="user-icon" />
-              {data.user}
-            </h3>
-            <p className="comment-text">{data.text}</p>
-            {data.GIF && (
-              <img
-                src={data.GIF}
-                width="100%"
-                height="400px"
-                alt="posted-gif"
-              />
-            )}
-          </div>
-        ))}
-      </div>
-    );
-  };
+
+  const setTotalPostedDataWithPersist = (postData) => {};
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setTotalPostedData([...totalPostedData, postData]);
-    setPostData({ user: 'manasaBingi', text: '', GIF: '', BGColor: '' });
+    const updatedPostData = [postData, ...totalPostedData];
+    setTotalPostedData(updatedPostData);
+    localStorage.setItem('postData', JSON.stringify(updatedPostData));
+    setPostData(initialState);
   };
+
   return (
     <div>
       <form onSubmit={onSubmit}>
         <Header />
+        <div className="compose-highlighter"></div>
         <div className="text-container">
           <FontAwesomeIcon icon={faUserCircle} className="user-icon" />
-          <input
+          <textarea
             required
+            rows="3"
             value={postData.text}
             className="form-control form-control-lg"
             type="text"
@@ -98,6 +79,7 @@ export default function App() {
         >
           {postData.GIF && (
             <img
+              style={{ borderRadius: '10px' }}
               src={postData.GIF}
               width="60%"
               height="300px"
@@ -151,7 +133,7 @@ export default function App() {
           </button>
         </div>
       </form>
-      <HandlePost />
+      <PostFeed totalPostedData={totalPostedData} />
     </div>
   );
 }

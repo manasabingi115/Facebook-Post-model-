@@ -11,27 +11,26 @@ export default function RenderGIF({
   const Render = () => {
     return (
       <div className="GIF-block">
-        {data &&
-          data.map((gif) => (
-            <div key={gif.id}>
-              <img
-                onClick={(e) => {
-                  e.preventDefault();
-                  setBorder(gif.id);
-                  setDisplayGIF(false);
-                  setPostData((prevState) => ({
-                    ...prevState,
-                    GIF: gif.images.fixed_height.url,
-                  }));
-                }}
-                className={border === gif.id ? 'img-border' : null}
-                src={gif.images.fixed_height.url}
-                width="200"
-                height="200"
-                alt="gif"
-              />
-            </div>
-          ))}
+        {data.map((gif) => (
+          <div key={gif.id}>
+            <img
+              onClick={(e) => {
+                e.preventDefault();
+                setBorder(gif.id);
+                setDisplayGIF(false);
+                setPostData((prevState) => ({
+                  ...prevState,
+                  GIF: gif.images.fixed_height.url,
+                }));
+              }}
+              className={border === gif.id ? 'img-border' : null}
+              src={gif.images.fixed_height.url}
+              width="200"
+              height="200"
+              alt="gif"
+            />
+          </div>
+        ))}
       </div>
     );
   };
