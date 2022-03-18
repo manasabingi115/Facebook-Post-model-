@@ -237,6 +237,7 @@ body {
   }
   .btn-light {
     margin: 10px;
+    width: 80%;
   }
   .comment-text {
     font-size: 30px;
